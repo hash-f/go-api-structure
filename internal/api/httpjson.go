@@ -170,3 +170,36 @@ func failedValidationResponse(w http.ResponseWriter, r *http.Request, errors map
 }
 
 // TODO: Add more specific error responses as needed (e.g., authentication errors).
+
+// decodeAndValidate decodes the JSON request body into dst and then validates dst.
+// dst must be a pointer to a struct that implements the Validator interface.
+// If decoding fails, it sends an appropriate error response (e.g., 400 Bad Request).
+// If validation fails, it sends a 422 Unprocessable Entity response with validation errors.
+// Returns true if both decoding and validation are successful, false otherwise.
+func decodeAndValidate[T Validator](w http.ResponseWriter, r *http.Request, dst T) bool {
+	err := decode(w, r, dst) // decode expects a pointer, T should be a pointer type that implements Validator
+	if err != nil {
+		// decode function already returns specific errors that can be mapped to badRequestResponse
+		// or serverErrorResponse if it's a more generic error.
+		// For simplicity here, we'll assume most decode errors are client-side.
+		// A more robust error handling might inspect err further.
+		var syntaxError *json.SyntaxError
+		var unmarshalTypeError *json.UnmarshalTypeError
+
+		switch {
+		case errors.As(err, &syntaxError), errors.Is(err, io.ErrUnexpectedEOF), errors.As(err, &unmarshalTypeError), errors.Is(err, io.EOF), strings.HasPrefix(err.Error(), "json: unknown field"), err.Error() == "http: request body too large", err.Error() == "body must only contain a single JSON value":
+			badRequestResponse(w, r, err)
+		default:
+			serverErrorResponse(w, r, err) // For other unexpected errors during decode
+		}
+		return false
+	}
+
+	// Perform validation
+	if validationErrors := dst.Valid(); validationErrors != nil {
+		failedValidationResponse(w, r, validationErrors)
+		return false
+	}
+
+	return true
+}

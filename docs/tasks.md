@@ -15,7 +15,7 @@
   - [x] 2.5. Implement Data Store/Repository Layer (`internal/store`)
     - [x] 2.5.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
     - [x] 2.5.2. Implement Store Interfaces for Postgres (using `sqlc` generated code)
-- [-] 3. Phase 3: HTTP Server Implementation (go-chi)
+- [x] 3. Phase 3: HTTP Server Implementation (go-chi)
   - [x] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
     - [x] 3.1.1. Initialize `chi.Router`
     - [x] 3.1.2. Add Global Middleware (logging, CORS, recovery)
@@ -26,12 +26,12 @@
     - [x] 3.3.1. `encode()` function for JSON responses
     - [x] 3.3.2. `decode()` function for JSON requests
     - [x] 3.3.3. Standard error response helpers
-  - [-] 3.4. Implement Data Validation (`internal/api/validation.go`)
-    - [ ] 3.4.1. Define `Validator` interface
-    - [ ] 3.4.2. Implement `Validator` for Request DTOs
-    - [ ] 3.4.3. Create `decodeAndValidate()` helper
-- [ ] 4. Phase 4: API Endpoints & Business Logic
-  - [ ] 4.1. Implement Authentication Service (`internal/auth`)
+  - [x] 3.4. Implement Data Validation (`internal/api/validation.go`)
+    - [x] 3.4.1. Define `Validator` interface
+    - [x] 3.4.2. Implement `Validator` for Request DTOs
+    - [x] 3.4.3. Create `decodeAndValidate()` helper
+- [-] 4. Phase 4: API Endpoints & Business Logic
+  - [-] 4.1. Implement Authentication Service (`internal/auth`)
     - [ ] 4.1.1. User registration logic (password hashing)
     - [ ] 4.1.2. User login logic (password verification, JWT generation)
     - [ ] 4.1.3. JWT Authentication Middleware
