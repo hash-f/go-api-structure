@@ -2,17 +2,20 @@ package config
 
 import (
 	"fmt"
-	"os" // Used for default in Load if getenv is nil, or for direct use if preferred
+	"os"
+	"strconv"
+	"time"
 
 	"github.com/joho/godotenv" // For loading .env files
 )
 
 // Config holds the application configuration.
 type Config struct {
-	AppEnv      string // e.g., "local", "dev", "stage", "production"
-	HTTPPort    string
-	DatabaseDSN string
-	JWTSecret   string
+	AppEnv            string // e.g., "local", "dev", "stage", "production"
+	HTTPPort          string
+	DatabaseDSN       string
+	JWTSecret         string
+	JWTExpiryDuration time.Duration
 	// Add other configuration fields as needed
 }
 
@@ -50,7 +53,17 @@ func Load(getenv func(key string) string) (*Config, error) {
 		return nil, fmt.Errorf("JWT_SECRET environment variable is required")
 	}
 
-	// TODO: Load other configuration fields
+	jwtExpiryMinutesStr := getenv("JWT_EXPIRY_MINUTES")
+	if jwtExpiryMinutesStr == "" {
+		jwtExpiryMinutesStr = "60" // Default to 60 minutes
+	}
+	jwtExpiryMinutes, err := strconv.Atoi(jwtExpiryMinutesStr)
+	if err != nil {
+		return nil, fmt.Errorf("invalid JWT_EXPIRY_MINUTES: %w", err)
+	}
+	cfg.JWTExpiryDuration = time.Duration(jwtExpiryMinutes) * time.Minute
+
+	// Add loading for other config fields here
 
 	return cfg, nil
 }

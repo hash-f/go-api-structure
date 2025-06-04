@@ -39,7 +39,7 @@
     - [x] Auth Handlers (`internal/api/handler_auth.go` - RegisterUser, LoginUser)
   - [x] 4.3. Implement CRUD Endpoints
     - [x] 4.3.1. Authentication Endpoints (`/auth/register`, `/auth/login`) - Handlers implemented
-    - [ ] 4.3.2. User Endpoints (`/api/v1/users/me`)
+    - [x] 4.3.2. User Endpoints (`/api/v1/users/me`) - Handler implemented and wired
     - [ ] 4.3.3. Vendor Endpoints (`/api/v1/vendors` - CRUD, ownership checks)
     - [ ] 4.3.4. Merchant Endpoints (`/api/v1/merchants` - CRUD, ownership checks)
 - [ ] 5. Phase 5: Testing, Refinements & Final Touches

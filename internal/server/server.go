@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go-api-structure/internal/api"
+	"go-api-structure/internal/auth"
 	"go-api-structure/internal/config"
 	"go-api-structure/internal/store"
 
@@ -19,10 +20,13 @@ import (
 // This typically includes the application configuration, logger,
 // data stores, and the router itself.
 type Server struct {
-	config *config.Config
-	logger *slog.Logger
-	store  store.Store
-	router *chi.Mux
+	config      *config.Config
+	logger      *slog.Logger
+	store       store.Store
+	router      *chi.Mux
+	authService *auth.AuthService
+	authHandler *api.AuthHandler
+	userHandler *api.UserHandler
 }
 
 // NewServer creates and configures a new Server instance.
@@ -36,6 +40,11 @@ func NewServer(cfg *config.Config, logger *slog.Logger, store store.Store) http.
 		store:  store,
 		router: chi.NewRouter(), // Initialize the chi router
 	}
+
+	// Initialize services and handlers
+	s.authService = auth.NewAuthService(s.store, cfg.JWTSecret, cfg.JWTExpiryDuration)
+	s.authHandler = api.NewAuthHandler(s.authService)
+	s.userHandler = api.NewUserHandler(s.store) // Assumes UserStore is directly on store.Store or s.store.UserStore()
 
 	// Global middleware
 	s.router.Use(middleware.RequestID) // Injects a request ID into the context
@@ -68,13 +77,17 @@ func (s *Server) addRoutes() {
 	s.router.Route("/api/v1", func(r chi.Router) {
 		// Authentication routes (e.g., /api/v1/auth/register, /api/v1/auth/login)
 		r.Route("/auth", func(r chi.Router) {
-			// r.Post("/register", s.handleRegisterUser()) // Placeholder
-			// r.Post("/login", s.handleLoginUser())       // Placeholder
+			r.Post("/register", s.authHandler.RegisterUser)
+			r.Post("/login", s.authHandler.LoginUser)
 		})
 
 		// User routes (e.g., /api/v1/users/me)
 		r.Route("/users", func(r chi.Router) {
-			// r.Get("/me", s.handleGetUserMe()) // Placeholder, requires auth middleware
+			// Protected routes - require JWT authentication
+			r.Group(func(r chi.Router) {
+				r.Use(s.authService.Middleware(api.ErrorResponse)) // Pass api.ErrorResponse as the error renderer
+				r.Get("/me", s.userHandler.GetMe)
+			})
 		})
 
 		// Vendor routes (e.g., /api/v1/vendors)
