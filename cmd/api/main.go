@@ -10,6 +10,7 @@ import (
 	"syscall"
 
 	"go-api-structure/internal/config"
+	"go-api-structure/internal/database" // Import database package
 	"go-api-structure/internal/logger" // Import your logger package
 )
 
@@ -45,11 +46,26 @@ func run(ctx context.Context, w io.Writer, args []string, getenv func(key string
 
 	slog.Info("Configuration loaded successfully", "http_port", cfg.HTTPPort, "app_env", cfg.AppEnv)
 
+	// Initialize database connection
+	slog.Info("Initializing database connection...", "dsn", cfg.DatabaseDSN) // Consider masking DSN in production logs if sensitive
+	db, err := database.NewDB(cfg.DatabaseDSN)
+	if err != nil {
+		slog.Error("Failed to initialize database connection", "error", err)
+		return fmt.Errorf("failed to initialize database: %w", err)
+	}
+	defer func() {
+		slog.Info("Closing database connection pool...")
+		if err := db.Close(); err != nil {
+			slog.Error("Failed to close database connection pool", "error", err)
+		}
+	}()
+	slog.Info("Database connection established successfully")
+
 	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
-	// TODO: Initialize database (using cfg.DatabaseDSN), server (using cfg.HTTPPort), etc.
-	// These components should receive the logger instance if they need to log.
+	// TODO: Initialize server (using cfg.HTTPPort, db), etc.
+	// These components should receive the logger instance and db instance if they need them.
 
 	slog.Info("Application ready and listening")
 
@@ -57,7 +73,7 @@ func run(ctx context.Context, w io.Writer, args []string, getenv func(key string
 	<-ctx.Done()
 
 	slog.Info("Application shutting down...", "signal", ctx.Err())
-	// TODO: Graceful shutdown of resources
+	// Graceful shutdown of resources is handled by deferred calls (e.g., db.Close())
 
 	return nil
 }

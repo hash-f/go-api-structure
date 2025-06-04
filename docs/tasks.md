@@ -6,7 +6,7 @@
 - [-] 2. Phase 2: Database Integration (Postgres)
   - [x] 2.1. Database Schema Design (Users, Vendors, Merchants tables)
   - [x] 2.2. Setup Migration Tool & Create Initial Migrations
-  - [-] 2.3. Implement Database Connection Package (`internal/database`)
+  - [x] 2.3. Implement Database Connection Package (`internal/database`)
   - [ ] 2.4. Implement Data Store/Repository Layer (`internal/store`)
     - [ ] 2.4.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
     - [ ] 2.4.2. Implement Store Interfaces for Postgres
