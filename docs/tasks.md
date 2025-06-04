@@ -1,11 +1,11 @@
-- [-] 1. Phase 1: Project Setup & Core Structure
+- [x] 1. Phase 1: Project Setup & Core Structure
   - [x] 1.1. Initialize Go Project (`go mod init`, create `cmd/api/main.go`)
   - [x] 1.2. Implement `main()` and `run()` Pattern (graceful shutdown, context handling)
   - [x] 1.3. Configuration Management (`internal/config`, load from env/file)
-  - [-] 1.4. Logging Setup (`internal/logger` or `log/slog`)
-- [ ] 2. Phase 2: Database Integration (Postgres)
-  - [ ] 2.1. Database Schema Design (Users, Vendors, Merchants tables)
-  - [ ] 2.2. Setup Migration Tool & Create Initial Migrations
+  - [x] 1.4. Logging Setup (`internal/logger` or `log/slog`)
+- [-] 2. Phase 2: Database Integration (Postgres)
+  - [x] 2.1. Database Schema Design (Users, Vendors, Merchants tables)
+  - [-] 2.2. Setup Migration Tool & Create Initial Migrations
   - [ ] 2.3. Implement Database Connection Package (`internal/database`)
   - [ ] 2.4. Implement Data Store/Repository Layer (`internal/store`)
     - [ ] 2.4.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
