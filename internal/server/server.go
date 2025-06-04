@@ -1,10 +1,8 @@
 package server
 
 import (
-	"context"
 	"log/slog"
 	"net/http"
-	"time"
 
 	"go-api-structure/internal/api"
 	"go-api-structure/internal/auth"
@@ -47,10 +45,10 @@ func NewServer(cfg *config.Config, logger *slog.Logger, store store.Store) http.
 	s.userHandler = api.NewUserHandler(s.store) // Assumes UserStore is directly on store.Store or s.store.UserStore()
 
 	// Global middleware
-	s.router.Use(middleware.RequestID) // Injects a request ID into the context
-	s.router.Use(middleware.RealIP)    // Sets X-Real-IP and X-Forwarded-For
+	s.router.Use(middleware.RequestID)   // Injects a request ID into the context
+	s.router.Use(middleware.RealIP)      // Sets X-Real-IP and X-Forwarded-For
 	s.router.Use(slogMiddleware(logger)) // Custom slog logging middleware
-	s.router.Use(middleware.Recoverer) // Recovers from panics
+	s.router.Use(middleware.Recoverer)   // Recovers from panics
 
 	// CORS configuration
 	s.router.Use(cors.Handler(cors.Options{
@@ -68,48 +66,6 @@ func NewServer(cfg *config.Config, logger *slog.Logger, store store.Store) http.
 	return s.router
 }
 
-// addRoutes is responsible for setting up all the API routes.
-func (s *Server) addRoutes() {
-	// Health check endpoint
-	s.router.Get("/health", s.handleHealthCheck())
-
-	// API v1 routes
-	s.router.Route("/api/v1", func(r chi.Router) {
-		// Authentication routes (e.g., /api/v1/auth/register, /api/v1/auth/login)
-		r.Route("/auth", func(r chi.Router) {
-			r.Post("/register", s.authHandler.RegisterUser)
-			r.Post("/login", s.authHandler.LoginUser)
-		})
-
-		// User routes (e.g., /api/v1/users/me)
-		r.Route("/users", func(r chi.Router) {
-			// Protected routes - require JWT authentication
-			r.Group(func(r chi.Router) {
-				r.Use(s.authService.Middleware(api.ErrorResponse)) // Pass api.ErrorResponse as the error renderer
-				r.Get("/me", s.userHandler.GetMe)
-			})
-		})
-
-		// Vendor routes (e.g., /api/v1/vendors)
-		r.Route("/vendors", func(r chi.Router) {
-			// r.Post("/", s.handleCreateVendor())    // Placeholder, requires auth
-			// r.Get("/", s.handleListUserVendors()) // Placeholder, requires auth
-			// r.Get("/{vendorID}", s.handleGetVendor()) // Placeholder, requires auth & ownership
-			// r.Put("/{vendorID}", s.handleUpdateVendor()) // Placeholder, requires auth & ownership
-			// r.Delete("/{vendorID}", s.handleDeleteVendor()) // Placeholder, requires auth & ownership
-		})
-
-		// Merchant routes (e.g., /api/v1/merchants)
-		r.Route("/merchants", func(r chi.Router) {
-			// r.Post("/", s.handleCreateMerchant())    // Placeholder, requires auth
-			// r.Get("/", s.handleListUserMerchants()) // Placeholder, requires auth
-			// r.Get("/{merchantID}", s.handleGetMerchant()) // Placeholder, requires auth & ownership
-			// r.Put("/{merchantID}", s.handleUpdateMerchant()) // Placeholder, requires auth & ownership
-			// r.Delete("/{merchantID}", s.handleDeleteMerchant()) // Placeholder, requires auth & ownership
-		})
-	})
-}
-
 // handleHealthCheck is a simple handler for health checks.
 func (s *Server) handleHealthCheck() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -117,33 +73,5 @@ func (s *Server) handleHealthCheck() http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte(`{"status": "ok"}`))
-	}
-}
-
-// slogMiddleware is a custom logging middleware using slog.
-// It logs request details similar to chi's built-in logger but uses the structured logger.
-func slogMiddleware(logger *slog.Logger) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		fn := func(w http.ResponseWriter, r *http.Request) {
-			tstart := time.Now()
-			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
-			ctx := context.WithValue(r.Context(), api.GetLoggerKey(), logger)
-			r = r.WithContext(ctx)
-
-			defer func() {
-				logger.Info("Served request",
-					"status", ww.Status(),
-					"method", r.Method,
-					"path", r.URL.Path,
-					"query", r.URL.RawQuery,
-					"request_id", middleware.GetReqID(r.Context()),
-					"duration", time.Since(tstart),
-					"bytes_written", ww.BytesWritten(),
-				)
-			}()
-
-			next.ServeHTTP(ww, r)
-		}
-		return http.HandlerFunc(fn)
 	}
 }
