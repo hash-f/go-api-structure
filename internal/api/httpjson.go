@@ -127,15 +127,15 @@ func decode[T any](w http.ResponseWriter, r *http.Request, dst T) error {
 // For example, data can be wrapped as {"data": ...} or errors as {"error": ...}.
 type envelope map[string]any
 
-// errorResponse sends a JSON formatted error message with the given status code.
-func errorResponse(w http.ResponseWriter, r *http.Request, status int, message any) {
+// ErrorResponse sends a JSON formatted error message with the given status code.
+func ErrorResponse(w http.ResponseWriter, r *http.Request, status int, message any) {
 	envelope := envelope{"error": message}
 	encode(w, r, status, envelope)
 }
 
-// serverErrorResponse sends a 500 Internal Server Error response.
+// ServerErrorResponse sends a 500 Internal Server Error response.
 // It logs the error before sending the generic message to the client.
-func serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
+func ServerErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
 	logger, _ := r.Context().Value(GetLoggerKey()).(*slog.Logger)
 	if logger != nil {
 		logger.Error("internal server error", "error", err.Error())
@@ -144,29 +144,29 @@ func serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
 	}
 
 	message := "the server encountered a problem and could not process your request"
-	errorResponse(w, r, http.StatusInternalServerError, message)
+	ErrorResponse(w, r, http.StatusInternalServerError, message)
 }
 
-// badRequestResponse sends a 400 Bad Request response.
-func badRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
-	errorResponse(w, r, http.StatusBadRequest, err.Error())
+// BadRequestResponse sends a 400 Bad Request response.
+func BadRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
+	ErrorResponse(w, r, http.StatusBadRequest, err.Error())
 }
 
-// notFoundResponse sends a 404 Not Found response.
-func notFoundResponse(w http.ResponseWriter, r *http.Request) {
+// NotFoundResponse sends a 404 Not Found response.
+func NotFoundResponse(w http.ResponseWriter, r *http.Request) {
 	message := "the requested resource could not be found"
-	errorResponse(w, r, http.StatusNotFound, message)
+	ErrorResponse(w, r, http.StatusNotFound, message)
 }
 
-// methodNotAllowedResponse sends a 405 Method Not Allowed response.
-func methodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
+// MethodNotAllowedResponse sends a 405 Method Not Allowed response.
+func MethodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
 	message := fmt.Sprintf("the %s method is not supported for this resource", r.Method)
-	errorResponse(w, r, http.StatusMethodNotAllowed, message)
+	ErrorResponse(w, r, http.StatusMethodNotAllowed, message)
 }
 
-// failedValidationResponse sends a 422 Unprocessable Entity response.
-func failedValidationResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
-	errorResponse(w, r, http.StatusUnprocessableEntity, errors)
+// FailedValidationResponse sends a 422 Unprocessable Entity response.
+func FailedValidationResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
+	ErrorResponse(w, r, http.StatusUnprocessableEntity, errors)
 }
 
 // TODO: Add more specific error responses as needed (e.g., authentication errors).
@@ -188,16 +188,16 @@ func decodeAndValidate[T Validator](w http.ResponseWriter, r *http.Request, dst 
 
 		switch {
 		case errors.As(err, &syntaxError), errors.Is(err, io.ErrUnexpectedEOF), errors.As(err, &unmarshalTypeError), errors.Is(err, io.EOF), strings.HasPrefix(err.Error(), "json: unknown field"), err.Error() == "http: request body too large", err.Error() == "body must only contain a single JSON value":
-			badRequestResponse(w, r, err)
+			BadRequestResponse(w, r, err)
 		default:
-			serverErrorResponse(w, r, err) // For other unexpected errors during decode
+			ServerErrorResponse(w, r, err) // For other unexpected errors during decode
 		}
 		return false
 	}
 
 	// Perform validation
 	if validationErrors := dst.Valid(); validationErrors != nil {
-		failedValidationResponse(w, r, validationErrors)
+		FailedValidationResponse(w, r, validationErrors)
 		return false
 	}
 

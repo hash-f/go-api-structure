@@ -2,10 +2,12 @@ package store
 
 import (
 	"context"
+	"errors"
 
 	"go-api-structure/internal/store/db"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 )
 
 // Store defines the interface for all data store operations.
@@ -15,6 +17,12 @@ import (
 // will be defined here and will typically use methods from the embedded Querier.
 // This approach allows for a clean separation: sqlc handles raw DB interaction,
 // while this package provides a more abstracted, application-aware data access layer.
+
+var (
+	// ErrNotFound is returned when a specific resource is not found in the store.
+	ErrNotFound = errors.New("store: resource not found")
+)
+
 type Store interface {
 	db.Querier
 	// We can add methods here that might combine multiple Querier calls
@@ -78,15 +86,36 @@ func (s *SQLStore) CreateUser(ctx context.Context, arg db.CreateUserParams) (db.
 }
 
 func (s *SQLStore) GetUserByID(ctx context.Context, id uuid.UUID) (db.User, error) {
-	return s.Queries.GetUserByID(ctx, id)
+	user, err := s.Queries.GetUserByID(ctx, id)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return db.User{}, ErrNotFound
+		}
+		return db.User{}, err
+	}
+	return user, nil
 }
 
 func (s *SQLStore) GetUserByEmail(ctx context.Context, email string) (db.User, error) {
-	return s.Queries.GetUserByEmail(ctx, email)
+	user, err := s.Queries.GetUserByEmail(ctx, email)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return db.User{}, ErrNotFound
+		}
+		return db.User{}, err
+	}
+	return user, nil
 }
 
 func (s *SQLStore) GetUserByUsername(ctx context.Context, username string) (db.User, error) {
-	return s.Queries.GetUserByUsername(ctx, username)
+	user, err := s.Queries.GetUserByUsername(ctx, username)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return db.User{}, ErrNotFound
+		}
+		return db.User{}, err
+	}
+	return user, nil
 }
 
 // VendorStore implementation

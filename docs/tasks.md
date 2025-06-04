@@ -31,11 +31,11 @@
     - [x] 3.4.2. Implement `Validator` for Request DTOs
     - [x] 3.4.3. Create `decodeAndValidate()` helper
 - [-] 4. Phase 4: API Endpoints & Business Logic
-  - [-] 4.1. Implement Authentication Service (`internal/auth`)
-    - [ ] 4.1.1. User registration logic (password hashing)
-    - [ ] 4.1.2. User login logic (password verification, JWT generation)
-    - [ ] 4.1.3. JWT Authentication Middleware
-  - [ ] 4.2. Implement Handler "Maker Funcs" (e.g., `internal/api/handler_user.go`)
+  - [x] 4.1. Implement Authentication Service (`internal/auth`)
+    - [x] 4.1.1. User registration logic (password hashing)
+    - [x] 4.1.2. User login logic (password verification, JWT generation)
+    - [x] 4.1.3. JWT Authentication Middleware
+  - [-] 4.2. Implement Handler "Maker Funcs" (e.g., `internal/api/handler_user.go`)
   - [ ] 4.3. Implement CRUD Endpoints
     - [ ] 4.3.1. Authentication Endpoints (`/auth/register`, `/auth/login`)
     - [ ] 4.3.2. User Endpoints (`/api/v1/users/me`)
