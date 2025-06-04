@@ -18,4 +18,4 @@ go.sum
 
 .env
 tmp/
-cmd/api/tmp
+cmd/api/tmp/
