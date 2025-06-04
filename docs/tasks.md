@@ -34,10 +34,11 @@
   - [x] 4.1. Implement Authentication Service (`internal/auth`)
     - [x] 4.1.1. User registration logic (password hashing)
     - [x] 4.1.2. User login logic (password verification, JWT generation)
-    - [x] 4.1.3. JWT Authentication Middleware
+    - [x] 4.1.3. JWT Authentication Middleware (Refactored to `internal/auth` with error renderer)
   - [-] 4.2. Implement Handler "Maker Funcs" (e.g., `internal/api/handler_user.go`)
-  - [ ] 4.3. Implement CRUD Endpoints
-    - [ ] 4.3.1. Authentication Endpoints (`/auth/register`, `/auth/login`)
+    - [x] Auth Handlers (`internal/api/handler_auth.go` - RegisterUser, LoginUser)
+  - [x] 4.3. Implement CRUD Endpoints
+    - [x] 4.3.1. Authentication Endpoints (`/auth/register`, `/auth/login`) - Handlers implemented
     - [ ] 4.3.2. User Endpoints (`/api/v1/users/me`)
     - [ ] 4.3.3. Vendor Endpoints (`/api/v1/vendors` - CRUD, ownership checks)
     - [ ] 4.3.4. Merchant Endpoints (`/api/v1/merchants` - CRUD, ownership checks)
