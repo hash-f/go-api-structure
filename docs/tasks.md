@@ -16,10 +16,10 @@
     - [x] 2.5.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
     - [x] 2.5.2. Implement Store Interfaces for Postgres (using `sqlc` generated code)
 - [-] 3. Phase 3: HTTP Server Implementation (go-chi)
-  - [-] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
-    - [ ] 3.1.1. Initialize `chi.Router`
-    - [ ] 3.1.2. Add Global Middleware (logging, CORS, recovery)
-  - [ ] 3.2. Implement Route Definitions (`internal/server/routes.go`)
+  - [x] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
+    - [x] 3.1.1. Initialize `chi.Router`
+    - [x] 3.1.2. Add Global Middleware (logging, CORS, recovery)
+  - [-] 3.2. Implement Route Definitions (`internal/server/routes.go`)
     - [ ] 3.2.1. Define `addRoutes` function
     - [ ] 3.2.2. Group routes using `router.Route()`
   - [ ] 3.3. Implement Request/Response Helpers (`internal/api/httpjson.go`)
