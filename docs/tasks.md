@@ -1,0 +1,44 @@
+- [-] 1. Phase 1: Project Setup & Core Structure
+  - [x] 1.1. Initialize Go Project (`go mod init`, create `cmd/api/main.go`)
+  - [x] 1.2. Implement `main()` and `run()` Pattern (graceful shutdown, context handling)
+  - [ ] 1.3. Configuration Management (`internal/config`, load from env/file)
+  - [ ] 1.4. Logging Setup (`internal/logger` or `log/slog`)
+- [ ] 2. Phase 2: Database Integration (Postgres)
+  - [ ] 2.1. Database Schema Design (Users, Vendors, Merchants tables)
+  - [ ] 2.2. Setup Migration Tool & Create Initial Migrations
+  - [ ] 2.3. Implement Database Connection Package (`internal/database`)
+  - [ ] 2.4. Implement Data Store/Repository Layer (`internal/store`)
+    - [ ] 2.4.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
+    - [ ] 2.4.2. Implement Store Interfaces for Postgres
+- [ ] 3. Phase 3: HTTP Server Implementation (go-chi)
+  - [ ] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
+    - [ ] 3.1.1. Initialize `chi.Router`
+    - [ ] 3.1.2. Add Global Middleware (logging, CORS, recovery)
+  - [ ] 3.2. Implement Route Definitions (`internal/server/routes.go`)
+    - [ ] 3.2.1. Define `addRoutes` function
+    - [ ] 3.2.2. Group routes using `router.Route()`
+  - [ ] 3.3. Implement Request/Response Helpers (`internal/api/httpjson.go`)
+    - [ ] 3.3.1. `encode()` function for JSON responses
+    - [ ] 3.3.2. `decode()` function for JSON requests
+    - [ ] 3.3.3. Standard error response helpers
+  - [ ] 3.4. Implement Data Validation (`internal/api/validation.go`)
+    - [ ] 3.4.1. Define `Validator` interface
+    - [ ] 3.4.2. Implement `Validator` for Request DTOs
+    - [ ] 3.4.3. Create `decodeAndValidate()` helper
+- [ ] 4. Phase 4: API Endpoints & Business Logic
+  - [ ] 4.1. Implement Authentication Service (`internal/auth`)
+    - [ ] 4.1.1. User registration logic (password hashing)
+    - [ ] 4.1.2. User login logic (password verification, JWT generation)
+    - [ ] 4.1.3. JWT Authentication Middleware
+  - [ ] 4.2. Implement Handler "Maker Funcs" (e.g., `internal/api/handler_user.go`)
+  - [ ] 4.3. Implement CRUD Endpoints
+    - [ ] 4.3.1. Authentication Endpoints (`/auth/register`, `/auth/login`)
+    - [ ] 4.3.2. User Endpoints (`/api/v1/users/me`)
+    - [ ] 4.3.3. Vendor Endpoints (`/api/v1/vendors` - CRUD, ownership checks)
+    - [ ] 4.3.4. Merchant Endpoints (`/api/v1/merchants` - CRUD, ownership checks)
+- [ ] 5. Phase 5: Testing, Refinements & Final Touches
+  - [ ] 5.1. Write Unit Tests (stores, validation, helpers, handlers)
+  - [ ] 5.2. Write Integration Tests (API endpoints using `httptest`)
+  - [ ] 5.3. Review and Finalize Directory Structure
+  - [ ] 5.4. Create Dockerfile (Optional)
+  - [ ] 5.5. Create/Update README.md (setup, config, build, run, test, API docs)
