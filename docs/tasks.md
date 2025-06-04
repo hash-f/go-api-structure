@@ -7,9 +7,14 @@
   - [x] 2.1. Database Schema Design (Users, Vendors, Merchants tables)
   - [x] 2.2. Setup Migration Tool & Create Initial Migrations
   - [x] 2.3. Implement Database Connection Package (`internal/database`)
-  - [ ] 2.4. Implement Data Store/Repository Layer (`internal/store`)
-    - [ ] 2.4.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
-    - [ ] 2.4.2. Implement Store Interfaces for Postgres
+  - [x] 2.4. Setup `sqlc` for SQL query generation
+    - [x] 2.4.1. Install `sqlc` CLI
+    - [x] 2.4.2. Create `sqlc.yaml` configuration file
+    - [x] 2.4.3. Write SQL queries for `sqlc` (users, vendors, merchants)
+    - [x] 2.4.4. Generate Go code using `sqlc`
+  - [-] 2.5. Implement Data Store/Repository Layer (`internal/store`)
+    - [ ] 2.5.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
+    - [ ] 2.5.2. Implement Store Interfaces for Postgres (using `sqlc` generated code)
 - [ ] 3. Phase 3: HTTP Server Implementation (go-chi)
   - [ ] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
     - [ ] 3.1.1. Initialize `chi.Router`
