@@ -22,11 +22,11 @@
   - [x] 3.2. Implement Route Definitions (`internal/server/routes.go`)
     - [x] 3.2.1. Define `addRoutes` function
     - [x] 3.2.2. Group routes using `router.Route()`
-  - [-] 3.3. Implement Request/Response Helpers (`internal/api/httpjson.go`)
-    - [ ] 3.3.1. `encode()` function for JSON responses
-    - [ ] 3.3.2. `decode()` function for JSON requests
-    - [ ] 3.3.3. Standard error response helpers
-  - [ ] 3.4. Implement Data Validation (`internal/api/validation.go`)
+  - [x] 3.3. Implement Request/Response Helpers (`internal/api/httpjson.go`)
+    - [x] 3.3.1. `encode()` function for JSON responses
+    - [x] 3.3.2. `decode()` function for JSON requests
+    - [x] 3.3.3. Standard error response helpers
+  - [-] 3.4. Implement Data Validation (`internal/api/validation.go`)
     - [ ] 3.4.1. Define `Validator` interface
     - [ ] 3.4.2. Implement `Validator` for Request DTOs
     - [ ] 3.4.3. Create `decodeAndValidate()` helper

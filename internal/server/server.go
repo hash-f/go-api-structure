@@ -1,10 +1,12 @@
 package server
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"time"
 
+	"go-api-structure/internal/api"
 	"go-api-structure/internal/config"
 	"go-api-structure/internal/store"
 
@@ -112,6 +114,8 @@ func slogMiddleware(logger *slog.Logger) func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
 			tstart := time.Now()
 			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
+			ctx := context.WithValue(r.Context(), api.GetLoggerKey(), logger)
+			r = r.WithContext(ctx)
 
 			defer func() {
 				logger.Info("Served request",
