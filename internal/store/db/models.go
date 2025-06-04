@@ -5,20 +5,21 @@
 package db
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Merchant struct {
-	ID          pgtype.UUID        `json:"id"`
+	ID          uuid.UUID          `json:"id"`
 	Name        string             `json:"name"`
 	Description pgtype.Text        `json:"description"`
-	UserID      pgtype.UUID        `json:"user_id"`
+	UserID      uuid.UUID          `json:"user_id"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
 }
 
 type User struct {
-	ID           pgtype.UUID        `json:"id"`
+	ID           uuid.UUID          `json:"id"`
 	Username     string             `json:"username"`
 	Email        string             `json:"email"`
 	PasswordHash string             `json:"password_hash"`
@@ -27,10 +28,10 @@ type User struct {
 }
 
 type Vendor struct {
-	ID          pgtype.UUID        `json:"id"`
+	ID          uuid.UUID          `json:"id"`
 	Name        string             `json:"name"`
 	Description pgtype.Text        `json:"description"`
-	UserID      pgtype.UUID        `json:"user_id"`
+	UserID      uuid.UUID          `json:"user_id"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
 }

@@ -7,7 +7,7 @@ package db
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
 type Querier interface {
@@ -16,13 +16,13 @@ type Querier interface {
 	CreateVendor(ctx context.Context, arg CreateVendorParams) (Vendor, error)
 	DeleteMerchant(ctx context.Context, arg DeleteMerchantParams) error
 	DeleteVendor(ctx context.Context, arg DeleteVendorParams) error
-	GetMerchantByID(ctx context.Context, id pgtype.UUID) (Merchant, error)
+	GetMerchantByID(ctx context.Context, id uuid.UUID) (Merchant, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
-	GetUserByID(ctx context.Context, id pgtype.UUID) (User, error)
+	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
-	GetVendorByID(ctx context.Context, id pgtype.UUID) (Vendor, error)
-	ListMerchantsByUserID(ctx context.Context, userID pgtype.UUID) ([]Merchant, error)
-	ListVendorsByUserID(ctx context.Context, userID pgtype.UUID) ([]Vendor, error)
+	GetVendorByID(ctx context.Context, id uuid.UUID) (Vendor, error)
+	ListMerchantsByUserID(ctx context.Context, userID uuid.UUID) ([]Merchant, error)
+	ListVendorsByUserID(ctx context.Context, userID uuid.UUID) ([]Vendor, error)
 	UpdateMerchant(ctx context.Context, arg UpdateMerchantParams) (Merchant, error)
 	UpdateVendor(ctx context.Context, arg UpdateVendorParams) (Vendor, error)
 }

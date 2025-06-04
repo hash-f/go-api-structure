@@ -3,7 +3,7 @@
   - [x] 1.2. Implement `main()` and `run()` Pattern (graceful shutdown, context handling)
   - [x] 1.3. Configuration Management (`internal/config`, load from env/file)
   - [x] 1.4. Logging Setup (`internal/logger` or `log/slog`)
-- [-] 2. Phase 2: Database Integration (Postgres)
+- [x] 2. Phase 2: Database Integration (Postgres)
   - [x] 2.1. Database Schema Design (Users, Vendors, Merchants tables)
   - [x] 2.2. Setup Migration Tool & Create Initial Migrations
   - [x] 2.3. Implement Database Connection Package (`internal/database`)
@@ -12,11 +12,11 @@
     - [x] 2.4.2. Create `sqlc.yaml` configuration file
     - [x] 2.4.3. Write SQL queries for `sqlc` (users, vendors, merchants)
     - [x] 2.4.4. Generate Go code using `sqlc`
-  - [-] 2.5. Implement Data Store/Repository Layer (`internal/store`)
-    - [ ] 2.5.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
-    - [ ] 2.5.2. Implement Store Interfaces for Postgres (using `sqlc` generated code)
-- [ ] 3. Phase 3: HTTP Server Implementation (go-chi)
-  - [ ] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
+  - [x] 2.5. Implement Data Store/Repository Layer (`internal/store`)
+    - [x] 2.5.1. Define Store Interfaces (UserStore, VendorStore, MerchantStore)
+    - [x] 2.5.2. Implement Store Interfaces for Postgres (using `sqlc` generated code)
+- [-] 3. Phase 3: HTTP Server Implementation (go-chi)
+  - [-] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
     - [ ] 3.1.1. Initialize `chi.Router`
     - [ ] 3.1.2. Add Global Middleware (logging, CORS, recovery)
   - [ ] 3.2. Implement Route Definitions (`internal/server/routes.go`)

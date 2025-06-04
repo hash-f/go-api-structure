@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -22,7 +23,7 @@ INSERT INTO vendors (
 `
 
 type CreateVendorParams struct {
-	UserID      pgtype.UUID `json:"user_id"`
+	UserID      uuid.UUID   `json:"user_id"`
 	Name        string      `json:"name"`
 	Description pgtype.Text `json:"description"`
 }
@@ -47,8 +48,8 @@ WHERE id = $1 AND user_id = $2
 `
 
 type DeleteVendorParams struct {
-	ID     pgtype.UUID `json:"id"`
-	UserID pgtype.UUID `json:"user_id"`
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
 }
 
 func (q *Queries) DeleteVendor(ctx context.Context, arg DeleteVendorParams) error {
@@ -61,7 +62,7 @@ SELECT id, name, description, user_id, created_at, updated_at FROM vendors
 WHERE id = $1
 `
 
-func (q *Queries) GetVendorByID(ctx context.Context, id pgtype.UUID) (Vendor, error) {
+func (q *Queries) GetVendorByID(ctx context.Context, id uuid.UUID) (Vendor, error) {
 	row := q.db.QueryRow(ctx, getVendorByID, id)
 	var i Vendor
 	err := row.Scan(
@@ -81,7 +82,7 @@ WHERE user_id = $1
 ORDER BY created_at DESC
 `
 
-func (q *Queries) ListVendorsByUserID(ctx context.Context, userID pgtype.UUID) ([]Vendor, error) {
+func (q *Queries) ListVendorsByUserID(ctx context.Context, userID uuid.UUID) ([]Vendor, error) {
 	rows, err := q.db.Query(ctx, listVendorsByUserID, userID)
 	if err != nil {
 		return nil, err
@@ -119,8 +120,8 @@ RETURNING id, name, description, user_id, created_at, updated_at
 `
 
 type UpdateVendorParams struct {
-	ID          pgtype.UUID `json:"id"`
-	UserID      pgtype.UUID `json:"user_id"`
+	ID          uuid.UUID   `json:"id"`
+	UserID      uuid.UUID   `json:"user_id"`
 	Name        pgtype.Text `json:"name"`
 	Description pgtype.Text `json:"description"`
 }

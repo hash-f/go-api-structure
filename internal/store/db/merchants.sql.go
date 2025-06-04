@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -22,7 +23,7 @@ INSERT INTO merchants (
 `
 
 type CreateMerchantParams struct {
-	UserID      pgtype.UUID `json:"user_id"`
+	UserID      uuid.UUID   `json:"user_id"`
 	Name        string      `json:"name"`
 	Description pgtype.Text `json:"description"`
 }
@@ -47,8 +48,8 @@ WHERE id = $1 AND user_id = $2
 `
 
 type DeleteMerchantParams struct {
-	ID     pgtype.UUID `json:"id"`
-	UserID pgtype.UUID `json:"user_id"`
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
 }
 
 func (q *Queries) DeleteMerchant(ctx context.Context, arg DeleteMerchantParams) error {
@@ -61,7 +62,7 @@ SELECT id, name, description, user_id, created_at, updated_at FROM merchants
 WHERE id = $1
 `
 
-func (q *Queries) GetMerchantByID(ctx context.Context, id pgtype.UUID) (Merchant, error) {
+func (q *Queries) GetMerchantByID(ctx context.Context, id uuid.UUID) (Merchant, error) {
 	row := q.db.QueryRow(ctx, getMerchantByID, id)
 	var i Merchant
 	err := row.Scan(
@@ -81,7 +82,7 @@ WHERE user_id = $1
 ORDER BY created_at DESC
 `
 
-func (q *Queries) ListMerchantsByUserID(ctx context.Context, userID pgtype.UUID) ([]Merchant, error) {
+func (q *Queries) ListMerchantsByUserID(ctx context.Context, userID uuid.UUID) ([]Merchant, error) {
 	rows, err := q.db.Query(ctx, listMerchantsByUserID, userID)
 	if err != nil {
 		return nil, err
@@ -119,8 +120,8 @@ RETURNING id, name, description, user_id, created_at, updated_at
 `
 
 type UpdateMerchantParams struct {
-	ID          pgtype.UUID `json:"id"`
-	UserID      pgtype.UUID `json:"user_id"`
+	ID          uuid.UUID   `json:"id"`
+	UserID      uuid.UUID   `json:"user_id"`
 	Name        pgtype.Text `json:"name"`
 	Description pgtype.Text `json:"description"`
 }
