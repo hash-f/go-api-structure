@@ -19,10 +19,10 @@
   - [x] 3.1. Implement `NewServer` Constructor (`internal/server/server.go`)
     - [x] 3.1.1. Initialize `chi.Router`
     - [x] 3.1.2. Add Global Middleware (logging, CORS, recovery)
-  - [-] 3.2. Implement Route Definitions (`internal/server/routes.go`)
-    - [ ] 3.2.1. Define `addRoutes` function
-    - [ ] 3.2.2. Group routes using `router.Route()`
-  - [ ] 3.3. Implement Request/Response Helpers (`internal/api/httpjson.go`)
+  - [x] 3.2. Implement Route Definitions (`internal/server/routes.go`)
+    - [x] 3.2.1. Define `addRoutes` function
+    - [x] 3.2.2. Group routes using `router.Route()`
+  - [-] 3.3. Implement Request/Response Helpers (`internal/api/httpjson.go`)
     - [ ] 3.3.1. `encode()` function for JSON responses
     - [ ] 3.3.2. `decode()` function for JSON requests
     - [ ] 3.3.3. Standard error response helpers

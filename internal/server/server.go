@@ -51,26 +51,59 @@ func NewServer(cfg *config.Config, logger *slog.Logger, store store.Store) http.
 		MaxAge:           300, // Maximum value not ignored by any major browsers
 	}))
 
-	// TODO: Setup routes - Subtask 3.2
-	// s.addRoutes()
+	// Setup routes
+	s.addRoutes()
 
 	return s.router
 }
 
-// addRoutes will be responsible for setting up all the API routes.
-// This will be implemented as part of Subtask 3.2.
-// func (s *Server) addRoutes() {
-// 	 s.router.Get("/health", s.handleHealthCheck())
-// }
+// addRoutes is responsible for setting up all the API routes.
+func (s *Server) addRoutes() {
+	// Health check endpoint
+	s.router.Get("/health", s.handleHealthCheck())
+
+	// API v1 routes
+	s.router.Route("/api/v1", func(r chi.Router) {
+		// Authentication routes (e.g., /api/v1/auth/register, /api/v1/auth/login)
+		r.Route("/auth", func(r chi.Router) {
+			// r.Post("/register", s.handleRegisterUser()) // Placeholder
+			// r.Post("/login", s.handleLoginUser())       // Placeholder
+		})
+
+		// User routes (e.g., /api/v1/users/me)
+		r.Route("/users", func(r chi.Router) {
+			// r.Get("/me", s.handleGetUserMe()) // Placeholder, requires auth middleware
+		})
+
+		// Vendor routes (e.g., /api/v1/vendors)
+		r.Route("/vendors", func(r chi.Router) {
+			// r.Post("/", s.handleCreateVendor())    // Placeholder, requires auth
+			// r.Get("/", s.handleListUserVendors()) // Placeholder, requires auth
+			// r.Get("/{vendorID}", s.handleGetVendor()) // Placeholder, requires auth & ownership
+			// r.Put("/{vendorID}", s.handleUpdateVendor()) // Placeholder, requires auth & ownership
+			// r.Delete("/{vendorID}", s.handleDeleteVendor()) // Placeholder, requires auth & ownership
+		})
+
+		// Merchant routes (e.g., /api/v1/merchants)
+		r.Route("/merchants", func(r chi.Router) {
+			// r.Post("/", s.handleCreateMerchant())    // Placeholder, requires auth
+			// r.Get("/", s.handleListUserMerchants()) // Placeholder, requires auth
+			// r.Get("/{merchantID}", s.handleGetMerchant()) // Placeholder, requires auth & ownership
+			// r.Put("/{merchantID}", s.handleUpdateMerchant()) // Placeholder, requires auth & ownership
+			// r.Delete("/{merchantID}", s.handleDeleteMerchant()) // Placeholder, requires auth & ownership
+		})
+	})
+}
 
 // handleHealthCheck is a simple handler for health checks.
-// func (s *Server) handleHealthCheck() http.HandlerFunc {
-// 	 return func(w http.ResponseWriter, r *http.Request) {
-// 		 // TODO: Use JSON response helper from Subtask 3.3
-// 		 w.WriteHeader(http.StatusOK)
-// 		 w.Write([]byte("OK"))
-// 	 }
-// }
+func (s *Server) handleHealthCheck() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// For now, a simple response. Later, we'll use JSON helpers (Subtask 3.3).
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"status": "ok"}`))
+	}
+}
 
 // slogMiddleware is a custom logging middleware using slog.
 // It logs request details similar to chi's built-in logger but uses the structured logger.
