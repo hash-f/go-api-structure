@@ -9,6 +9,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+
 	// "go-api-structure/internal/api" // Removed to break import cycle
 	"go-api-structure/internal/store"
 	// "go-api-structure/internal/store/db" // No longer directly used here
@@ -18,7 +19,7 @@ import (
 // It checks for a valid JWT in the Authorization header.
 // If the token is valid, it retrieves the user from the store and adds them to the request context using ContextSetUser.
 // It calls the provided errorRenderer for sending HTTP error responses.
-func (s *AuthService) Middleware(errorRenderer func(w http.ResponseWriter, r *http.Request, status int, message any)) func(http.Handler) http.Handler {
+func (s *AuthService) JWTMiddleware(errorRenderer func(w http.ResponseWriter, r *http.Request, status int, message any)) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			authHeader := r.Header.Get("Authorization")

@@ -35,7 +35,7 @@ func (s *Server) apiAuthRoutes(r chi.Router) {
 func (s *Server) apiUserRoutes(r chi.Router) {
 	// Protected routes - require JWT authentication
 	r.Group(func(r chi.Router) {
-		r.Use(s.authService.Middleware(api.ErrorResponse))
+		r.Use(s.authService.JWTMiddleware(api.ErrorResponse))
 		r.Get("/me", s.userHandler.GetMe)
 	})
 }
