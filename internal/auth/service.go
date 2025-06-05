@@ -10,6 +10,7 @@ import (
 	"go-api-structure/internal/api/dto" // Assuming CreateUserRequest is here
 	"go-api-structure/internal/store"
 	"go-api-structure/internal/store/db" // sqlc generated models and params
+	"github.com/google/uuid"
 )
 
 var (
@@ -40,10 +41,17 @@ func (s *AuthService) Register(ctx context.Context, req *dto.CreateUserRequest) 
 		return nil, fmt.Errorf("failed to hash password during registration: %w", err)
 	}
 
+	// Generate a new API key
+	apiKey, err := uuid.NewRandom()
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate API key: %w", err)
+	}
+
 	params := db.CreateUserParams{
 		Username:     req.Username,
 		Email:        req.Email,
 		PasswordHash: hashedPassword,
+		ApiKey:       apiKey.String(), // Add the generated API key here
 	}
 
 	user, err := s.userStore.CreateUser(ctx, params)

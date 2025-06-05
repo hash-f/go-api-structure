@@ -15,20 +15,27 @@ const createUser = `-- name: CreateUser :one
 INSERT INTO users (
     username,
     email,
-    password_hash
+    password_hash,
+    api_key
 ) VALUES (
-    $1, $2, $3
-) RETURNING id, username, email, password_hash, created_at, updated_at
+    $1, $2, $3, $4
+) RETURNING id, username, email, password_hash, created_at, updated_at, api_key
 `
 
 type CreateUserParams struct {
 	Username     string `json:"username"`
 	Email        string `json:"email"`
 	PasswordHash string `json:"password_hash"`
+	ApiKey       string `json:"api_key"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, createUser, arg.Username, arg.Email, arg.PasswordHash)
+	row := q.db.QueryRow(ctx, createUser,
+		arg.Username,
+		arg.Email,
+		arg.PasswordHash,
+		arg.ApiKey,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -37,12 +44,13 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.PasswordHash,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ApiKey,
 	)
 	return i, err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, username, email, password_hash, created_at, updated_at FROM users
+SELECT id, username, email, password_hash, created_at, updated_at, api_key FROM users
 WHERE email = $1
 `
 
@@ -56,12 +64,13 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.PasswordHash,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ApiKey,
 	)
 	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, username, email, password_hash, created_at, updated_at FROM users
+SELECT id, username, email, password_hash, created_at, updated_at, api_key FROM users
 WHERE id = $1
 `
 
@@ -75,12 +84,13 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.PasswordHash,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ApiKey,
 	)
 	return i, err
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, username, email, password_hash, created_at, updated_at FROM users
+SELECT id, username, email, password_hash, created_at, updated_at, api_key FROM users
 WHERE username = $1
 `
 
@@ -94,6 +104,35 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 		&i.PasswordHash,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ApiKey,
+	)
+	return i, err
+}
+
+const updateUserAPIKey = `-- name: UpdateUserAPIKey :one
+UPDATE users
+SET api_key = $1,
+    updated_at = NOW()
+WHERE id = $2
+RETURNING id, username, email, password_hash, created_at, updated_at, api_key
+`
+
+type UpdateUserAPIKeyParams struct {
+	ApiKey string    `json:"api_key"`
+	ID     uuid.UUID `json:"id"`
+}
+
+func (q *Queries) UpdateUserAPIKey(ctx context.Context, arg UpdateUserAPIKeyParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUserAPIKey, arg.ApiKey, arg.ID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Email,
+		&i.PasswordHash,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ApiKey,
 	)
 	return i, err
 }

@@ -15,6 +15,7 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
+	UpdateUserAPIKey(ctx context.Context, arg UpdateUserAPIKeyParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

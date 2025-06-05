@@ -9,3 +9,5 @@ Once a subtask is done mark it with [x] and ask for my confirmation.
 Once I have confirmed create a commit for it. And write a good commit message.
 
 Once all the subtasks of a task are done mark it with an [x] as well.
+
+If you cant find the file you are looking for ask me.
