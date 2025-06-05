@@ -55,10 +55,10 @@
       - [x] Add `github.com/swaggo/http-swagger` package
       - [x] Add `github.com/swaggo/swag` package
     - [x] 6.1.3. Create initial Swagger configuration structure
-  - [ ] 6.2. Configure Swagger Integration
-    - [ ] 6.2.1. Add API info structure in main application entry point
-    - [ ] 6.2.2. Configure Swagger UI middleware in server setup
-    - [ ] 6.2.3. Add Swagger UI endpoint to routes (`/swagger/*`)
+  - [x] 6.2. Configure Swagger Integration
+    - [x] 6.2.1. Add API info structure in main application entry point
+    - [x] 6.2.2. Configure Swagger UI middleware in server setup
+    - [x] 6.2.3. Add Swagger UI endpoint to routes (`/swagger/*`)
   - [ ] 6.3. Document API Endpoints
     - [ ] 6.3.1. Add general API annotations to main entry point
     - [ ] 6.3.2. Document authentication endpoints

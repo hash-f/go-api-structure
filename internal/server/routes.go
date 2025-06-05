@@ -4,12 +4,16 @@ import (
 	"go-api-structure/internal/api"
 
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger" // Swagger UI handler
 )
 
 // addRoutes is responsible for setting up all the API routes.
 func (s *Server) addRoutes() {
 	// Health check endpoint
 	s.router.Get("/health", s.handleHealthCheck())
+
+	// Swagger UI endpoint
+	s.router.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	// API v1 routes
 	s.router.Route("/api/v1", func(r chi.Router) {

@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"net/http"
 
+	_ "go-api-structure/internal/docs" // Import for swagger docs generation
+
 	"go-api-structure/internal/api"
 	"go-api-structure/internal/auth"
 	"go-api-structure/internal/config"
