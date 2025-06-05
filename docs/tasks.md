@@ -59,11 +59,11 @@
     - [x] 6.2.1. Add API info structure in main application entry point
     - [x] 6.2.2. Configure Swagger UI middleware in server setup
     - [x] 6.2.3. Add Swagger UI endpoint to routes (`/swagger/*`)
-  - [ ] 6.3. Document API Endpoints
-    - [ ] 6.3.1. Add general API annotations to main entry point
-    - [ ] 6.3.2. Document authentication endpoints
-    - [ ] 6.3.3. Document user endpoints
-    - [ ] 6.3.4. Document vendor endpoints
+  - [-] 6.3. Document API Endpoints
+    - [x] 6.3.1. Add general API annotations to main entry point
+    - [x] 6.3.2. Document authentication endpoints
+    - [x] 6.3.3. Document user endpoints
+    - [b] 6.3.4. Document vendor endpoints (Blocked: Implement task 4.3.3 first)
     - [ ] 6.3.5. Document merchant endpoints
   - [ ] 6.4. Generate and Validate Documentation
     - [ ] 6.4.1. Run Swagger generation (`swag init`)

@@ -19,6 +19,18 @@ func NewAuthHandler(authService *auth.AuthService) *AuthHandler {
 	return &AuthHandler{authService: authService}
 }
 
+// @Summary      Register a new user
+// @Description  Creates a new user account with the provided details.
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        user body dto.CreateUserRequest true "User registration details"
+// @Success      201  {object}  dto.UserResponse "Successfully registered user"
+// @Failure      400  {object}  map[string]string "Bad request (e.g., malformed JSON)"
+// @Failure      409  {object}  map[string]string "Conflict (user already exists)"
+// @Failure      422  {object}  map[string]string "Unprocessable entity (validation error)"
+// @Failure      500  {object}  map[string]string "Internal server error"
+// @Router       /auth/register [post]
 // RegisterUser handles user registration requests.
 // It expects a JSON body conforming to dto.CreateUserRequest.
 // On success, it returns a 201 Created status with the new user's details (excluding password).
@@ -47,6 +59,18 @@ func (h *AuthHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	encode(w, r, http.StatusCreated, userResponse)
 }
 
+// @Summary      Log in a user
+// @Description  Authenticates a user with email and password, returning a JWT and user details upon success.
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        credentials body dto.LoginUserRequest true "User login credentials"
+// @Success      200  {object}  dto.LoginUserResponse "Successfully logged in"
+// @Failure      400  {object}  map[string]string "Bad request (e.g., malformed JSON)"
+// @Failure      401  {object}  map[string]string "Unauthorized (invalid credentials)"
+// @Failure      422  {object}  map[string]string "Unprocessable entity (validation error)"
+// @Failure      500  {object}  map[string]string "Internal server error"
+// @Router       /auth/login [post]
 // LoginUser handles user login requests.
 // It expects an email and password in the request body.
 // On successful authentication, it returns a JWT and user information.

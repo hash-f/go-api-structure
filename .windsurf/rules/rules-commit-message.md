@@ -2,7 +2,10 @@
 trigger: model_decision
 ---
 
+Follow:
+
 - Dont reference full filenames like this cci:1://file:///Users/h/Developer/go/go-api-structure/internal/logger/logger.go:7:0-31:1
+- Dont dont add info about the commands you ran.
 
 Example commit message:
 feat(api): Implement /users/me endpoint and migrate to pgx

@@ -22,6 +22,15 @@ func NewUserHandler(userStore store.UserStore) *UserHandler {
 	}
 }
 
+// @Summary      Get current user's details
+// @Description  Retrieves the details of the currently authenticated user.
+// @Tags         Users
+// @Produce      json
+// @Security     Bearer
+// @Success      200  {object}  dto.UserResponse "Successfully retrieved user details"
+// @Failure      401  {object}  map[string]string "Unauthorized (e.g., no user in context, invalid token)"
+// @Failure      500  {object}  map[string]string "Internal server error"
+// @Router       /users/me [get]
 // GetMe handles requests for the authenticated user's details.
 // It expects the user to be authenticated by the JWT middleware.
 func (h *UserHandler) GetMe(w http.ResponseWriter, r *http.Request) {
