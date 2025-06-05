@@ -1,0 +1,8 @@
+{
+  "outputTypes": ["json", "yaml"],
+  "parseVendor": false,
+  "parseDependency": false,
+  "markdownFilesDir": "",
+  "parseInternal": true,
+  "generatedTime": false
+}

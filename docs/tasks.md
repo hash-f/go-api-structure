@@ -49,12 +49,12 @@
   - [ ] 5.4. Create Dockerfile (Optional)
   - [ ] 5.5. Create/Update README.md (setup, config, build, run, test, API docs)
 - [-] 6. Phase 6: API Documentation with Swagger
-  - [-] 6.1. Setup Swagger
+  - [x] 6.1. Setup Swagger
     - [x] 6.1.1. Install `swag` CLI tool (`go install github.com/swaggo/swag/cmd/swag@latest`)
     - [x] 6.1.2. Add Swagger dependencies to Go modules
       - [x] Add `github.com/swaggo/http-swagger` package
       - [x] Add `github.com/swaggo/swag` package
-    - [ ] 6.1.3. Create initial Swagger configuration structure
+    - [x] 6.1.3. Create initial Swagger configuration structure
   - [ ] 6.2. Configure Swagger Integration
     - [ ] 6.2.1. Add API info structure in main application entry point
     - [ ] 6.2.2. Configure Swagger UI middleware in server setup
