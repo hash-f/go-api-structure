@@ -10,6 +10,7 @@ import (
 	"go-api-structure/internal/auth"
 	"go-api-structure/internal/config"
 	"go-api-structure/internal/store"
+	"go-api-structure/internal/user" // Added for UserService
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -24,6 +25,7 @@ type Server struct {
 	store       store.Store
 	router      *chi.Mux
 	authService *auth.AuthService
+	userService user.ServiceInterface // Added UserService
 	authHandler *api.AuthHandler
 	userHandler *api.UserHandler
 }
@@ -63,9 +65,11 @@ func (s *Server) handleHealthCheck() http.HandlerFunc {
 }
 
 func (s *Server) initDependencies() {
-	s.authService = auth.NewAuthService(s.store, s.config.JWTSecret, s.config.JWTExpiryDuration)
+	// Initialize UserService first as AuthService might depend on it
+	s.userService = user.NewService(s.store) 
+	s.authService = auth.NewAuthService(s.store, s.userService, s.config.JWTSecret, s.config.JWTExpiryDuration) // Pass userService
 	s.authHandler = api.NewAuthHandler(s.authService)
-	s.userHandler = api.NewUserHandler(s.store)
+	s.userHandler = api.NewUserHandler(s.userService) // Pass userService
 }
 
 func (s *Server) addMiddlewares() {

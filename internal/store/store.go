@@ -41,6 +41,7 @@ type UserStore interface {
 	GetUserByID(ctx context.Context, id uuid.UUID) (db.User, error)
 	GetUserByEmail(ctx context.Context, email string) (db.User, error)
 	GetUserByUsername(ctx context.Context, username string) (db.User, error)
+	GetUserByAPIKey(ctx context.Context, apiKey string) (db.User, error)
 	// TODO: Add UpdateUser, DeleteUser if needed later
 }
 
@@ -91,6 +92,17 @@ func (s *SQLStore) GetUserByEmail(ctx context.Context, email string) (db.User, e
 
 func (s *SQLStore) GetUserByUsername(ctx context.Context, username string) (db.User, error) {
 	user, err := s.Queries.GetUserByUsername(ctx, username)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return db.User{}, ErrNotFound
+		}
+		return db.User{}, err
+	}
+	return user, nil
+}
+
+func (s *SQLStore) GetUserByAPIKey(ctx context.Context, apiKey string) (db.User, error) {
+	user, err := s.Queries.GetUserByAPIKey(ctx, apiKey)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return db.User{}, ErrNotFound

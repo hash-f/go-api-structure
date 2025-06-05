@@ -6,29 +6,33 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"go-api-structure/internal/api/dto" // Assuming CreateUserRequest is here
 	"go-api-structure/internal/store"
 	"go-api-structure/internal/store/db" // sqlc generated models and params
+	"go-api-structure/internal/user"     // Added for UserService
+
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
 var (
-	ErrUserAlreadyExists = errors.New("user with this email or username already exists")
-	ErrInvalidCredentials  = errors.New("invalid email or password")
+	ErrUserAlreadyExists  = errors.New("user with this email or username already exists")
+	ErrInvalidCredentials = errors.New("invalid email or password")
 )
 
 // AuthService provides methods for user authentication and registration.
 type AuthService struct {
 	userStore   store.UserStore
+	userService user.ServiceInterface // Added UserService
 	jwtSecret   string
 	tokenExpiry time.Duration
 }
 
 // NewAuthService creates a new AuthService.
-func NewAuthService(userStore store.UserStore, jwtSecret string, tokenExpiry time.Duration) *AuthService {
+func NewAuthService(userStore store.UserStore, userService user.ServiceInterface, jwtSecret string, tokenExpiry time.Duration) *AuthService {
 	return &AuthService{
 		userStore:   userStore,
+		userService: userService, // Added UserService
 		jwtSecret:   jwtSecret,
 		tokenExpiry: tokenExpiry,
 	}

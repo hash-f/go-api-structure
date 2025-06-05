@@ -136,6 +136,51 @@ paths:
       summary: Register a new user
       tags:
       - Auth
+  /users/{id}:
+    get:
+      description: Retrieves the details of a user by their ID.
+      parameters:
+      - description: User ID (UUID format)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved user details
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Invalid user ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized (e.g., invalid API key)
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - APIKey: []
+      summary: Get user details by ID
+      tags:
+      - Users
   /users/me:
     get:
       description: Retrieves the details of the currently authenticated user.

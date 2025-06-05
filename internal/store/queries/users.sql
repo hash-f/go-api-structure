@@ -26,3 +26,7 @@ SET api_key = $1,
     updated_at = NOW()
 WHERE id = $2
 RETURNING *;
+
+-- name: GetUserByAPIKey :one
+SELECT * FROM users
+WHERE api_key = $1;
