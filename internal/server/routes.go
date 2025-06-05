@@ -16,38 +16,26 @@ func (s *Server) addRoutes() {
 	s.router.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	// API v1 routes
-	s.router.Route("/api/v1", func(r chi.Router) {
-		// Authentication routes (e.g., /api/v1/auth/register, /api/v1/auth/login)
-		r.Route("/auth", func(r chi.Router) {
-			r.Post("/register", s.authHandler.RegisterUser)
-			r.Post("/login", s.authHandler.LoginUser)
-		})
+	s.router.Route("/api/v1", s.apiRoutes)
+}
 
-		// User routes (e.g., /api/v1/users/me)
-		r.Route("/users", func(r chi.Router) {
-			// Protected routes - require JWT authentication
-			r.Group(func(r chi.Router) {
-				r.Use(s.authService.Middleware(api.ErrorResponse)) // Pass api.ErrorResponse as the error renderer
-				r.Get("/me", s.userHandler.GetMe)
-			})
-		})
+func (s *Server) apiRoutes(r chi.Router) {
+	// Authentication routes (e.g., /api/v1/auth/register, /api/v1/auth/login)
+	r.Route("/auth", s.apiAuthRoutes)
 
-		// Vendor routes (e.g., /api/v1/vendors)
-		r.Route("/vendors", func(r chi.Router) {
-			// r.Post("/", s.handleCreateVendor())    // Placeholder, requires auth
-			// r.Get("/", s.handleListUserVendors()) // Placeholder, requires auth
-			// r.Get("/{vendorID}", s.handleGetVendor()) // Placeholder, requires auth & ownership
-			// r.Put("/{vendorID}", s.handleUpdateVendor()) // Placeholder, requires auth & ownership
-			// r.Delete("/{vendorID}", s.handleDeleteVendor()) // Placeholder, requires auth & ownership
-		})
+	// User routes (e.g., /api/v1/users/me)
+	r.Route("/users", s.apiUserRoutes)
+}
 
-		// Merchant routes (e.g., /api/v1/merchants)
-		r.Route("/merchants", func(r chi.Router) {
-			// r.Post("/", s.handleCreateMerchant())    // Placeholder, requires auth
-			// r.Get("/", s.handleListUserMerchants()) // Placeholder, requires auth
-			// r.Get("/{merchantID}", s.handleGetMerchant()) // Placeholder, requires auth & ownership
-			// r.Put("/{merchantID}", s.handleUpdateMerchant()) // Placeholder, requires auth & ownership
-			// r.Delete("/{merchantID}", s.handleDeleteMerchant()) // Placeholder, requires auth & ownership
-		})
+func (s *Server) apiAuthRoutes(r chi.Router) {
+	r.Post("/register", s.authHandler.RegisterUser)
+	r.Post("/login", s.authHandler.LoginUser)
+}
+
+func (s *Server) apiUserRoutes(r chi.Router) {
+	// Protected routes - require JWT authentication
+	r.Group(func(r chi.Router) {
+		r.Use(s.authService.Middleware(api.ErrorResponse))
+		r.Get("/me", s.userHandler.GetMe)
 	})
 }

@@ -11,20 +11,10 @@ import (
 )
 
 type Querier interface {
-	CreateMerchant(ctx context.Context, arg CreateMerchantParams) (Merchant, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
-	CreateVendor(ctx context.Context, arg CreateVendorParams) (Vendor, error)
-	DeleteMerchant(ctx context.Context, arg DeleteMerchantParams) error
-	DeleteVendor(ctx context.Context, arg DeleteVendorParams) error
-	GetMerchantByID(ctx context.Context, id uuid.UUID) (Merchant, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
-	GetVendorByID(ctx context.Context, id uuid.UUID) (Vendor, error)
-	ListMerchantsByUserID(ctx context.Context, userID uuid.UUID) ([]Merchant, error)
-	ListVendorsByUserID(ctx context.Context, userID uuid.UUID) ([]Vendor, error)
-	UpdateMerchant(ctx context.Context, arg UpdateMerchantParams) (Merchant, error)
-	UpdateVendor(ctx context.Context, arg UpdateVendorParams) (Vendor, error)
 }
 
 var _ Querier = (*Queries)(nil)

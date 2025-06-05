@@ -40,8 +40,6 @@
   - [x] 4.3. Implement CRUD Endpoints
     - [x] 4.3.1. Authentication Endpoints (`/auth/register`, `/auth/login`) - Handlers implemented
     - [x] 4.3.2. User Endpoints (`/api/v1/users/me`) - Handler implemented and wired
-    - [ ] 4.3.3. Vendor Endpoints (`/api/v1/vendors` - CRUD, ownership checks)
-    - [ ] 4.3.4. Merchant Endpoints (`/api/v1/merchants` - CRUD, ownership checks)
 - [ ] 5. Phase 5: Testing, Refinements & Final Touches
   - [ ] 5.1. Write Unit Tests (stores, validation, helpers, handlers)
   - [ ] 5.2. Write Integration Tests (API endpoints using `httptest`)
@@ -63,8 +61,6 @@
     - [x] 6.3.1. Add general API annotations to main entry point
     - [x] 6.3.2. Document authentication endpoints
     - [x] 6.3.3. Document user endpoints
-    - [b] 6.3.4. Document vendor endpoints (Blocked: Implement task 4.3.3 first)
-    - [ ] 6.3.5. Document merchant endpoints
   - [ ] 6.4. Generate and Validate Documentation
     - [ ] 6.4.1. Run Swagger generation (`swag init`)
     - [ ] 6.4.2. Test documentation via Swagger UI

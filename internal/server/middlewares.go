@@ -8,11 +8,12 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 )
 
 // slogMiddleware is a custom logging middleware using slog.
 // It logs request details similar to chi's built-in logger but uses the structured logger.
-func slogMiddleware(logger *slog.Logger) func(next http.Handler) http.Handler {
+func createSlogMiddleware(logger *slog.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
 			tstart := time.Now()
@@ -36,4 +37,15 @@ func slogMiddleware(logger *slog.Logger) func(next http.Handler) http.Handler {
 		}
 		return http.HandlerFunc(fn)
 	}
+}
+
+func createCorsMiddleware() func(next http.Handler) http.Handler {
+	return cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"}, // Allow all for now, tighten in production
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any major browsers
+	})
 }

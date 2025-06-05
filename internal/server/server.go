@@ -13,7 +13,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/cors"
 )
 
 // Server holds the dependencies for the HTTP server.
@@ -42,25 +41,10 @@ func NewServer(cfg *config.Config, logger *slog.Logger, store store.Store) http.
 	}
 
 	// Initialize services and handlers
-	s.authService = auth.NewAuthService(s.store, cfg.JWTSecret, cfg.JWTExpiryDuration)
-	s.authHandler = api.NewAuthHandler(s.authService)
-	s.userHandler = api.NewUserHandler(s.store) // Assumes UserStore is directly on store.Store or s.store.UserStore()
+	s.initDependencies()
 
 	// Global middleware
-	s.router.Use(middleware.RequestID)   // Injects a request ID into the context
-	s.router.Use(middleware.RealIP)      // Sets X-Real-IP and X-Forwarded-For
-	s.router.Use(slogMiddleware(logger)) // Custom slog logging middleware
-	s.router.Use(middleware.Recoverer)   // Recovers from panics
-
-	// CORS configuration
-	s.router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://*", "http://*"}, // Allow all for now, tighten in production
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
-		MaxAge:           300, // Maximum value not ignored by any major browsers
-	}))
+	s.addMiddlewares()
 
 	// Setup routes
 	s.addRoutes()
@@ -76,4 +60,18 @@ func (s *Server) handleHealthCheck() http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte(`{"status": "ok"}`))
 	}
+}
+
+func (s *Server) initDependencies() {
+	s.authService = auth.NewAuthService(s.store, s.config.JWTSecret, s.config.JWTExpiryDuration)
+	s.authHandler = api.NewAuthHandler(s.authService)
+	s.userHandler = api.NewUserHandler(s.store)
+}
+
+func (s *Server) addMiddlewares() {
+	s.router.Use(middleware.RequestID)           // Injects a request ID into the context
+	s.router.Use(middleware.RealIP)              // Sets X-Real-IP and X-Forwarded-For
+	s.router.Use(createSlogMiddleware(s.logger)) // Custom slog logging middleware
+	s.router.Use(middleware.Recoverer)           // Recovers from panics
+	s.router.Use(createCorsMiddleware())         // CORS configuration
 }

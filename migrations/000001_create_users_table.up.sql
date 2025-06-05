@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Optional: Add an extension for gen_random_uuid() if not already enabled
--- CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+-- Add an extension for gen_random_uuid() if not already enabled
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- Note: gen_random_uuid() is available in PostgreSQL 13+.
 -- For older versions, you might need pgcrypto's uuid_generate_v4().
