@@ -8,12 +8,15 @@ set -e
 echo "Generating Swagger documentation..."
 
 # Generate Swagger docs using the swag CLI
-~/go/bin/swag init \
-  --dir ./cmd/api,./internal/api \
-  --parseDependency \
-  --output ./internal/docs \
-  --generalInfo ./internal/docs/swagger.go \
-  --parseInternal
+# Generate Swagger docs using the swag CLI
+# Use -g to specify the main Go file as the entry point
+# Use -o to specify the output directory for generated docs
+swag init -g cmd/api/main.go -o internal/docs
 
-echo "Swagger documentation generated successfully!"
-echo "You can access the Swagger UI at: http://localhost:8080/swagger/index.html when the server is running"
+if [ $? -eq 0 ]; then
+  echo "Swagger documentation generated successfully in internal/docs."
+  echo "You can access the Swagger UI at: http://localhost:8080/swagger/index.html when the server is running"
+else
+  echo "Error generating Swagger documentation."
+  exit 1
+fi

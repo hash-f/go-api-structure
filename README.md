@@ -98,6 +98,28 @@ JWT_EXPIRY_DURATION=24h
 go run cmd/api/main.go
 ```
 
+### Git Hooks Setup (Lefthook)
+
+This project uses [Lefthook](https://github.com/evilmartians/lefthook) to manage Git hooks. Lefthook helps automate tasks like generating Swagger documentation before committing.
+
+1.  **Install Lefthook**:
+    If you don't have Lefthook installed, you can install it via Go:
+    ```bash
+    go install github.com/evilmartians/lefthook/cmd/lefthook@latest
+    ```
+    Alternatively, use Homebrew on macOS:
+    ```bash
+    brew install lefthook
+    ```
+    For other installation methods, see the [Lefthook documentation](https://github.com/evilmartians/lefthook#installation).
+
+2.  **Install Hooks**:
+    After installing Lefthook, navigate to the project root directory and run:
+    ```bash
+    lefthook install
+    ```
+    This will set up the pre-commit hooks defined in `lefthook.yml`. Now, when you commit changes to Go files, Swagger documentation will be automatically regenerated and staged.
+
 ## Adding New Resources
 
 ### 1. Adding a New Entity

@@ -1,0 +1,18 @@
+# Lefthook Git hooks configuration
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  commands:
+    swagger-docs:
+      # Run the swagger script only if .go files are changed
+      glob: "*.go"
+      run: |
+        echo "Lefthook: Running swagger script due to Go file changes..."
+        ./scripts/swagger.sh
+        if [ $? -eq 0 ]; then
+          echo "Lefthook: Swagger script completed successfully. Staging docs..."
+          git add internal/docs/
+        else
+          echo "Lefthook: Swagger script failed. Aborting commit."
+          exit 1
+        fi

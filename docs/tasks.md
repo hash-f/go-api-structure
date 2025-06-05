@@ -64,7 +64,6 @@
   - [x] 6.4. Generate and Validate Documentation
     - [x] 6.4.1. Run Swagger generation (`swag init`)
     - [x] 6.4.2. Test documentation via Swagger UI
-    - [ ] 6.4.3. Create documentation update script
-  - [ ] 6.5. Documentation Maintenance
-    - [ ] 6.5.1. Automate documentation updates (pre-commit hooks)
-    - [ ] 6.5.2. Add documentation verification to CI/CD (if applicable)
+    - [x] 6.4.3. Create documentation update script
+  - [x] 6.5. Documentation Maintenance
+    - [x] 6.5.1. Automate documentation updates (pre-commit hooks)
