@@ -2,8 +2,6 @@ package auth
 
 import (
 	"net/http"
-
-	"go-api-structure/internal/user" // For user.ServiceInterface
 )
 
 const (
@@ -12,7 +10,7 @@ const (
 
 // APIKeyMiddleware creates a middleware that authenticates requests using an API key.
 // It expects the AuthService to have a UserService instance provided to it.
-func (s *AuthService) APIKeyMiddleware(userService user.ServiceInterface, errorFunc func(w http.ResponseWriter, r *http.Request, statusCode int, message any)) func(next http.Handler) http.Handler {
+func (s *AuthService) APIKeyMiddleware(errorFunc func(w http.ResponseWriter, r *http.Request, statusCode int, message any)) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			apiKey := r.Header.Get(APIKeyHeader)
@@ -21,7 +19,7 @@ func (s *AuthService) APIKeyMiddleware(userService user.ServiceInterface, errorF
 				return
 			}
 
-			dbUser, err := userService.GetUserByAPIKey(r.Context(), apiKey)
+			dbUser, err := s.userService.GetUserByAPIKey(r.Context(), apiKey)
 			if err != nil {
 				// Consider logging the error for internal review: log.Printf("API key validation error: %v", err)
 				// For the client, it's an invalid API key.

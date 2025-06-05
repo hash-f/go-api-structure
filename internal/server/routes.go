@@ -41,7 +41,7 @@ func (s *Server) apiUserRoutes(r chi.Router) {
 
 	// Route protected by API Key
 	r.Group(func(r chi.Router) {
-		r.Use(s.authService.APIKeyMiddleware(s.userService, api.ErrorResponse))
+		r.Use(s.authService.APIKeyMiddleware(api.ErrorResponse))
 		r.Get("/{id}", s.userHandler.GetUser) // GET /api/v1/users/{id}
 	})
 }
