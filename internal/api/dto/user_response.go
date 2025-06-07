@@ -2,7 +2,6 @@ package dto
 
 import (
 	"go-api-structure/internal/store/db"
-	"net/mail"
 	"time"
 
 	"github.com/google/uuid"
@@ -33,38 +32,4 @@ func NewUserResponse(user *db.User) *UserResponse {
 		CreatedAt: user.CreatedAt.Time, // Convert pgtype.Timestamptz to time.Time
 		UpdatedAt: user.UpdatedAt.Time, // Convert pgtype.Timestamptz to time.Time
 	}
-}
-
-// LoginUserRequest defines the structure for a user login request.
-type LoginUserRequest struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,min=8,max=72"`
-}
-
-// Valid checks if the LoginUserRequest fields are valid.
-func (r *LoginUserRequest) Valid() map[string]string {
-	errors := make(map[string]string)
-	if r.Email == "" {
-		errors["email"] = "Email is required"
-	} else if !isValidEmail(r.Email) {
-		errors["email"] = "Invalid email format"
-	}
-
-	if r.Password == "" {
-		errors["password"] = "Password is required"
-	} else if len(r.Password) < 8 {
-		errors["password"] = "Password must be at least 8 characters long"
-	} else if len(r.Password) > 72 { // bcrypt has a 72-byte limit
-		errors["password"] = "Password must be at most 72 characters long"
-	}
-
-	if len(errors) > 0 {
-		return errors
-	}
-	return nil
-}
-
-func isValidEmail(email string) bool {
-	_, err := mail.ParseAddress(email)
-	return err == nil
 }

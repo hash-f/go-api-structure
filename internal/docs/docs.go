@@ -272,6 +272,11 @@ const docTemplate = `{
     "definitions": {
         "dto.CreateUserRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -295,9 +300,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
-                    "type": "string",
-                    "maxLength": 72,
-                    "minLength": 8
+                    "type": "string"
                 }
             }
         },
