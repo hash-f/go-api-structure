@@ -7,12 +7,10 @@ import (
 // CreateUserRequest defines the expected structure for a new user registration request.
 // It includes fields for username, email, and password.
 type CreateUserRequest struct {
-	Username string `json:"username" validate:"required,trimLenMin=3,trimLenMax=50"`
+	Username string `json:"username" validate:"required,trimLenMin=3,trimLenMax=50,min=3,max=50"`
 	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,trimLenMin=8,trimLenMax=72"`
+	Password string `json:"password" validate:"required,trimLenMin=8,trimLenMax=72,min=8,max=72"`
 }
-
-
 
 // Valid checks the validity of the CreateUserRequest fields.
 // It returns a map of validation errors if any are found, otherwise nil.

@@ -4,8 +4,12 @@ definitions:
       email:
         type: string
       password:
+        maxLength: 72
+        minLength: 8
         type: string
       username:
+        maxLength: 50
+        minLength: 3
         type: string
     required:
     - email
@@ -17,6 +21,8 @@ definitions:
       email:
         type: string
       password:
+        maxLength: 72
+        minLength: 8
         type: string
     required:
     - email

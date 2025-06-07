@@ -7,7 +7,7 @@ import (
 // LoginUserRequest defines the structure for a user login request.
 type LoginUserRequest struct {
 	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,trimLenMin=8,trimLenMax=72"`
+	Password string `json:"password" validate:"required,trimLenMin=8,trimLenMax=72,min=8,max=72"`
 }
 
 // Valid checks if the LoginUserRequest fields are valid.
